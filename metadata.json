@@ -1,0 +1,5 @@
+{
+  "name": "VArch AI",
+  "description": "An AI-powered companion designed to help senior citizens master technology literacy, detect scams, and navigate the digital world with confidence.",
+  "requestFramePermissions": ["microphone"]
+}
