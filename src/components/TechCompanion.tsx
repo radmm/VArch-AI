@@ -39,22 +39,23 @@ export default function TechCompanion() {
     }
   }, [messages]);
 
-  const handleSend = async () => {
-    if (!input.trim() || isLoading) return;
+  const handleSend = async (overrideInput?: string) => {
+    const messageContent = overrideInput || input;
+    if (!messageContent.trim() || isLoading || isListening) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
       role: 'user',
-      content: input,
+      content: messageContent,
       timestamp: new Date(),
     };
 
     setMessages((prev) => [...prev, userMessage]);
-    setInput('');
+    setInput(''); // Always clear input on send
     setIsLoading(true);
 
     try {
-      const advice = await getTechAdvice(input);
+      const advice = await getTechAdvice(messageContent);
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
@@ -119,6 +120,10 @@ export default function TechCompanion() {
       const transcript = event.results[0][0].transcript;
       setInput(transcript);
       setIsListening(false);
+      // Automatically send the transcript
+      if (transcript.trim()) {
+        handleSend(transcript);
+      }
     };
 
     recognition.onerror = (event: any) => {
@@ -190,7 +195,7 @@ export default function TechCompanion() {
                     {msg.role === 'user' ? 'You' : 'VArch AI'}
                   </div>
                   <div className="prose prose-lg dark:prose-invert max-w-none">
-                    {msg.content}
+                    <ReactMarkdown>{msg.content}</ReactMarkdown>
                   </div>
                 </div>
               </motion.div>

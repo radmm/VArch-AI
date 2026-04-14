@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { generateScamScenario } from '@/services/geminiService';
+import ReactMarkdown from 'react-markdown';
 import { toast } from 'sonner';
 
 interface Scenario {
@@ -92,7 +93,7 @@ export default function ScamTrainer() {
             
             <CardContent className="p-8">
               <div className="bg-muted p-6 rounded-xl border-2 border-muted-foreground/20 mb-8 font-mono text-lg whitespace-pre-wrap">
-                {scenario.message}
+                <ReactMarkdown>{scenario.message}</ReactMarkdown>
               </div>
 
               <div className="space-y-4">
@@ -138,7 +139,9 @@ export default function ScamTrainer() {
                           <><XCircle className="text-destructive" /> Not quite safe...</>
                         )}
                       </h4>
-                      <p className="text-xl">{scenario.options[selectedOption!].explanation}</p>
+                      <div className="text-xl">
+                        <ReactMarkdown>{scenario.options[selectedOption!].explanation}</ReactMarkdown>
+                      </div>
                     </div>
 
                     <div className="w-full space-y-4">

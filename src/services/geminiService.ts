@@ -1,6 +1,11 @@
 import { GoogleGenAI, Type } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const apiKey = process.env.GEMINI_API_KEY;
+if (!apiKey) {
+  console.warn("GEMINI_API_KEY is not defined in the environment. AI features may not work.");
+}
+
+const ai = new GoogleGenAI({ apiKey: apiKey || 'dummy-key' });
 
 export const techCompanionSystemPrompt = `
 You are "VArch AI", a patient, friendly, and encouraging AI companion for senior citizens (ages 65+).
@@ -17,20 +22,25 @@ RULES:
 `;
 
 export const getTechAdvice = async (query: string) => {
-  const response = await ai.models.generateContent({
-    model: "gemini-3-flash-preview",
-    contents: query,
-    config: {
-      systemInstruction: techCompanionSystemPrompt,
-    },
-  });
-  return response.text;
+  try {
+    const response = await ai.models.generateContent({
+      model: "gemini-3-flash-preview",
+      contents: query,
+      config: {
+        systemInstruction: techCompanionSystemPrompt,
+      },
+    });
+    return response.text;
+  } catch (error) {
+    console.error('Gemini API Error (getTechAdvice):', error);
+    throw error;
+  }
 };
 
 export const generateScamScenario = async () => {
   const response = await ai.models.generateContent({
     model: "gemini-3-flash-preview",
-    contents: "Generate a realistic but safe scam scenario for a senior citizen to practice identifying. Include the message (email/text) and 3 options for how to respond (1 correct, 2 incorrect).",
+    contents: "Generate a realistic but safe scam scenario for a senior citizen to practice identifying. Include the message (email/text) and 3 options for how to respond (1 correct, 2 incorrect). Return a JSON object with fields: title, message, options (array of {text, isCorrect, explanation}), and redFlags (array of strings).",
     config: {
       responseMimeType: "application/json",
       responseSchema: {
