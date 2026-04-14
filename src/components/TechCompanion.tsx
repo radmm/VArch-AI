@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Input } from '@/components/ui/input';
 import { getTechAdvice } from '@/services/geminiService';
 import ReactMarkdown from 'react-markdown';
+import { toast } from 'sonner';
 
 interface Message {
   id: string;
@@ -27,6 +28,7 @@ export default function TechCompanion() {
   const [isLoading, setIsLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const recognitionRef = useRef<any>(null);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -62,6 +64,7 @@ export default function TechCompanion() {
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
       console.error('Error getting tech advice:', error);
+      toast.error("I'm having trouble connecting right now. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -69,37 +72,56 @@ export default function TechCompanion() {
 
   const toggleListening = () => {
     if (!('webkitSpeechRecognition' in window) && !('speechRecognition' in window)) {
-      alert('Speech recognition is not supported in your browser.');
+      toast.error('Speech recognition is not supported in your browser. Please try using Chrome or Edge.');
+      return;
+    }
+
+    if (isListening) {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+      setIsListening(false);
       return;
     }
 
     const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).speechRecognition;
     const recognition = new SpeechRecognition();
+    recognitionRef.current = recognition;
 
     recognition.continuous = false;
     recognition.interimResults = false;
     recognition.lang = 'en-US';
 
-    if (isListening) {
-      setIsListening(false);
-      recognition.stop();
-    } else {
+    recognition.onstart = () => {
       setIsListening(true);
+      toast.info("Listening...");
+    };
+
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript;
+      setInput(transcript);
+      setIsListening(false);
+    };
+
+    recognition.onerror = (event: any) => {
+      console.error('Speech recognition error:', event.error);
+      setIsListening(false);
+      if (event.error === 'not-allowed') {
+        toast.error("Microphone access was denied. Please check your browser permissions.");
+      } else {
+        toast.error("Sorry, I couldn't hear you. Please try again.");
+      }
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    try {
       recognition.start();
-
-      recognition.onresult = (event: any) => {
-        const transcript = event.results[0][0].transcript;
-        setInput(transcript);
-        setIsListening(false);
-      };
-
-      recognition.onerror = () => {
-        setIsListening(false);
-      };
-
-      recognition.onend = () => {
-        setIsListening(false);
-      };
+    } catch (error) {
+      console.error('Error starting recognition:', error);
+      setIsListening(false);
     }
   };
 
@@ -140,7 +162,7 @@ export default function TechCompanion() {
                     {msg.role === 'user' ? 'You' : 'VArch AI'}
                   </div>
                   <div className="prose prose-lg dark:prose-invert max-w-none">
-                    <ReactMarkdown>{msg.content}</ReactMarkdown>
+                    {msg.content}
                   </div>
                 </div>
               </motion.div>

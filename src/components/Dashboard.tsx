@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 import { Bot, ShieldAlert, BookOpen, ArrowRight, Smartphone, Laptop, Tablet, Watch } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -39,32 +39,18 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
   return (
     <div className="space-y-12 py-8">
       <section className="text-center space-y-6">
-        <motion.h1 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-5xl md:text-6xl font-extrabold tracking-tight"
-        >
+        <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight">
           Welcome to <span className="text-primary">VArch AI</span>
-        </motion.h1>
-        <motion.p 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="text-2xl text-muted-foreground max-w-2xl mx-auto leading-relaxed"
-        >
+        </h1>
+        <p className="text-2xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
           Your patient companion for mastering the digital world. 
           Choose a tool below to get started.
-        </motion.p>
+        </p>
       </section>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {features.map((feature, index) => (
-          <motion.div
-            key={feature.id}
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.1 * (index + 1) }}
-          >
+          <div key={feature.id}>
             <Card 
               className="h-full border-2 hover:border-primary transition-all cursor-pointer group shadow-lg hover:shadow-2xl"
               onClick={() => onNavigate(feature.tab)}
@@ -79,12 +65,18 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button variant="ghost" className="text-lg group-hover:translate-x-2 transition-transform p-0">
+                <button 
+                  className="text-lg group-hover:translate-x-2 transition-transform p-0 flex items-center gap-2 text-primary font-medium"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onNavigate(feature.tab);
+                  }}
+                >
                   Get Started <ArrowRight className="ml-2" />
-                </Button>
+                </button>
               </CardContent>
             </Card>
-          </motion.div>
+          </div>
         ))}
       </div>
 
@@ -99,15 +91,14 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
             { icon: Laptop, label: 'Computer Help' },
             { icon: Watch, label: 'Watch Help' }
           ].map((item) => (
-            <Button 
+            <button 
               key={item.label}
-              variant="outline" 
-              className="h-32 flex flex-col gap-3 rounded-2xl border-2 text-xl hover:bg-white hover:shadow-md transition-all"
+              className="h-32 flex flex-col items-center justify-center gap-3 rounded-2xl border-2 text-xl hover:bg-white hover:shadow-md transition-all bg-background"
               onClick={() => onNavigate('companion')}
             >
               <item.icon size={32} />
               {item.label}
-            </Button>
+            </button>
           ))}
         </div>
       </section>
