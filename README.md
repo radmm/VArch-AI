@@ -1,5 +1,5 @@
 <div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+<img width="1200" height="475" alt="GHBanner" src="https://cdn.discordapp.com/attachments/1463227227507527776/1493713210937704638/Untitled38_20260415015721.png?ex=69dff855&is=69dea6d5&hm=e8ebef25a77e547e2963594bf6fe019d246305632f35074d176255e62d635b4d&" />
 </div>
 
 # Run and deploy your AI Studio app
