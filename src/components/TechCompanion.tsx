@@ -70,7 +70,7 @@ export default function TechCompanion() {
     }
   };
 
-  const toggleListening = () => {
+  const toggleListening = async () => {
     if (!('webkitSpeechRecognition' in window) && !('speechRecognition' in window)) {
       toast.error('Speech recognition is not supported in your browser. Please try using Chrome or Edge.');
       return;
@@ -81,6 +81,24 @@ export default function TechCompanion() {
         recognitionRef.current.stop();
       }
       setIsListening(false);
+      return;
+    }
+
+    // Explicitly request microphone permission first to force the browser prompt
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      // We don't need the stream, just the permission. Stop it immediately.
+      stream.getTracks().forEach(track => track.stop());
+    } catch (error: any) {
+      console.error('Microphone permission denied:', error);
+      if (error.name === 'NotAllowedError' || error.message?.includes('not allowed')) {
+        toast.error(
+          "Microphone access was denied. This often happens in previews. Please try opening the app in a new tab using the button at the top right.",
+          { duration: 6000 }
+        );
+      } else {
+        toast.error("Microphone access was denied. Please check your browser permissions.");
+      }
       return;
     }
 
@@ -128,9 +146,19 @@ export default function TechCompanion() {
   return (
     <Card className="flex flex-col h-[70vh] min-h-[500px] max-h-[700px] max-w-2xl mx-auto shadow-xl border-2">
       <CardHeader className="bg-primary text-primary-foreground rounded-t-lg">
-        <CardTitle className="text-2xl flex items-center gap-2">
-          <Bot className="w-8 h-8" />
-          Tech Companion
+        <CardTitle className="text-2xl flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <Bot className="w-8 h-8" />
+            Tech Companion
+          </div>
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 hidden sm:flex"
+            onClick={() => window.open(window.location.href, '_blank')}
+          >
+            Open in New Tab
+          </Button>
         </CardTitle>
         <CardDescription className="text-primary-foreground/80 text-lg">
           Ask me any technology question, and I'll explain it simply.
