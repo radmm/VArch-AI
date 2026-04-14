@@ -3,6 +3,19 @@
 </div>
 
 
+# VArch AI
+
+A digital companion for seniors who got handed the internet with zero instructions.
+
+**Tech Companion** answers any tech question in plain English, voice included.
+**Scam Awareness Trainer** lets you practice spotting scams before a real one wipes out your savings.
+**Jargon Buster** finally explains what "the cloud" actually is.
+
+Built with React 19, Tailwind CSS, Gemini Flash, and shadcn/ui.
+
+Made for GenLink Hacks.
+
+
 ## Run Locally
 
 **Prerequisites:**  Node.js
