@@ -4,7 +4,6 @@ import { Send, User, Bot, Loader2, Mic, MicOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { getTechAdvice } from '@/services/geminiService';
 import ReactMarkdown from 'react-markdown';
 
@@ -105,7 +104,7 @@ export default function TechCompanion() {
   };
 
   return (
-    <Card className="flex flex-col h-[600px] max-w-2xl mx-auto shadow-xl border-2">
+    <Card className="flex flex-col h-[70vh] min-h-[500px] max-h-[700px] max-w-2xl mx-auto shadow-xl border-2">
       <CardHeader className="bg-primary text-primary-foreground rounded-t-lg">
         <CardTitle className="text-2xl flex items-center gap-2">
           <Bot className="w-8 h-8" />
@@ -116,51 +115,52 @@ export default function TechCompanion() {
         </CardDescription>
       </CardHeader>
       
-      <CardContent className="flex-1 overflow-hidden p-0 flex flex-col">
-        <ScrollArea className="flex-1 p-6" ref={scrollRef}>
-          <div className="space-y-6">
-            <AnimatePresence initial={false}>
-              {messages.map((msg) => (
-                <motion.div
-                  key={msg.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                >
-                  <div
-                    className={`max-w-[85%] p-4 rounded-2xl shadow-sm border ${
-                      msg.role === 'user'
-                        ? 'bg-primary text-primary-foreground rounded-tr-none'
-                        : 'bg-muted text-foreground rounded-tl-none'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2 mb-2 opacity-70 text-sm font-medium">
-                      {msg.role === 'user' ? <User size={16} /> : <Bot size={16} />}
-                      {msg.role === 'user' ? 'You' : 'VArch AI'}
-                    </div>
-                    <div className="prose prose-lg dark:prose-invert max-w-none">
-                      <ReactMarkdown>{msg.content}</ReactMarkdown>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-            {isLoading && (
+      <CardContent className="flex-1 overflow-hidden p-0 flex flex-col h-0">
+        <div 
+          className="flex-1 overflow-y-auto p-6 space-y-6" 
+          ref={scrollRef}
+        >
+          <AnimatePresence initial={false}>
+            {messages.map((msg) => (
               <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="flex justify-start"
+                key={msg.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
-                <div className="bg-muted p-4 rounded-2xl rounded-tl-none flex items-center gap-2">
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                  <span className="text-lg">Thinking...</span>
+                <div
+                  className={`max-w-[85%] p-4 rounded-2xl shadow-sm border ${
+                    msg.role === 'user'
+                      ? 'bg-primary text-primary-foreground rounded-tr-none'
+                      : 'bg-muted text-foreground rounded-tl-none'
+                  }`}
+                >
+                  <div className="flex items-center gap-2 mb-2 opacity-70 text-sm font-medium">
+                    {msg.role === 'user' ? <User size={16} /> : <Bot size={16} />}
+                    {msg.role === 'user' ? 'You' : 'VArch AI'}
+                  </div>
+                  <div className="prose prose-lg dark:prose-invert max-w-none">
+                    <ReactMarkdown>{msg.content}</ReactMarkdown>
+                  </div>
                 </div>
               </motion.div>
-            )}
-          </div>
-        </ScrollArea>
+            ))}
+          </AnimatePresence>
+          {isLoading && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex justify-start"
+            >
+              <div className="bg-muted p-4 rounded-2xl rounded-tl-none flex items-center gap-2">
+                <Loader2 className="w-5 h-5 animate-spin" />
+                <span className="text-lg">Thinking...</span>
+              </div>
+            </motion.div>
+          )}
+        </div>
 
-        <div className="p-4 border-t-2 bg-muted/30">
+        <div className="p-4 border-t-2 bg-muted/30 shrink-0">
           <form
             onSubmit={(e) => {
               e.preventDefault();
