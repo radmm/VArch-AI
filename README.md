@@ -1,28 +1,25 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://cdn.discordapp.com/attachments/1463227227507527776/1493713210937704638/Untitled38_20260415015721.png?ex=69dff855&is=69dea6d5&hm=e8ebef25a77e547e2963594bf6fe019d246305632f35074d176255e62d635b4d&" />
-</div>
-
-
 # VArch AI
 
-A digital companion for seniors who got handed the internet with zero instructions.
+An AI-powered companion designed to help senior citizens master technology literacy, detect scams, and navigate the digital world with confidence.
 
-**Tech Companion** answers any tech question in plain English, voice included.
-**Scam Awareness Trainer** lets you practice spotting scams before a real one wipes out your savings.
-**Jargon Buster** finally explains what "the cloud" actually is.
+## Features
 
-Built with React 19, Tailwind CSS, Gemini Flash, and shadcn/ui.
+- **Tech Companion**: A patient, friendly AI that explains technical concepts using simple analogies.
+- **Scam Awareness Trainer**: Practice identifying common digital scams in a safe, simulated environment.
+- **Jargon Buster**: Translate confusing technology words into plain English.
+- **Voice Support**: Interact with the AI using your voice for a more natural experience.
 
-Made for GenLink Hacks.
+## Tech Stack
 
+- **Frontend**: React with TypeScript
+- **Styling**: Tailwind CSS
+- **AI**: Google Gemini API
+- **Animations**: Motion (Framer Motion)
+- **Icons**: Lucide React
 
-## Run Locally
+## Getting Started
 
-**Prerequisites:**  Node.js
-
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+1. Clone the repository.
+2. Install dependencies: `npm install`.
+3. Set up your `GEMINI_API_KEY` in a `.env` file.
+4. Run the development server: `npm run dev`.
