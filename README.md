@@ -1,3 +1,7 @@
+<img src="https://cdn.discordapp.com/attachments/1463227227507527776/1493713210937704638/Untitled38_20260415015721.png?ex=69e149d5&is=69dff855&hm=95a4a3e2107ddef484e05cb1c3b8ca6da412227c89e04fed3bbf32d6c14e7aaa&" width="300">
+
+
+
 # VArch AI
 
 An AI-powered companion designed to help senior citizens master technology literacy, detect scams, and navigate the digital world with confidence.
